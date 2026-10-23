@@ -1,0 +1,55 @@
+# 운영(Swarm) 배포 템플릿. docker compose는 로컬 전용 — 여기선 쓰지 않는다.
+# 배포: docker stack deploy -c docker-stack.yaml <stack-name>
+#
+# 이 이미지는 DB를 포함하지 않는다. MSSQL은 별도로 관리되는 인스턴스를 쓴다.
+version: "3.8"
+
+services:
+  app:
+    image: ${IMAGE:-starterkit-be}:${TAG:-latest}
+    networks:
+      - app_network
+    env_file:
+      - .env
+
+    deploy:
+      replicas: ${REPLICAS:-1}
+      update_config:
+        delay: 10s
+        parallelism: 1
+        failure_action: rollback
+
+      # ── 재시작 정책 (2026-08 운영에서 얻은 교훈) ──
+      # 'on-failure'가 아니라 'any'를 쓴다: 프로세스가 예외를 정상 종료 코드(0)로
+      # 처리하며 꺼져도 'any'는 이유 불문 재기동한다.
+      # max_attempts는 넣지 않는다: Swarm은 window(아래 120s) 안에 재시도 횟수를
+      # 다 쓰면 해당 태스크를 "영구 포기"하고 다시 만들지 않는다 — DB 점검처럼
+      # 기동 실패가 길게 이어지면 그 사이 replicas 0으로 죽은 채 남고, 점검이
+      # 끝나도 자동 복구되지 않는다.
+      restart_policy:
+        condition: any
+        delay: 15s
+        window: 120s
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # 로깅 드라이버는 인프라(예: awslogs, 또는 nginx 옆 fluentd 등)에 맞춰
+    # 채운다. 아무것도 안 넣으면 Swarm 기본(json-file)로 각 노드 로컬에 쌓인다.
+    # logging:
+    #   driver: "awslogs"
+    #   options:
+    #     awslogs-region: "ap-northeast-2"
+    #     awslogs-group: "dockerlog"
+    #     awslogs-stream: "${PUBLISH_ENV}/starterkit-be"
+    #     tag: "image={{.ImageName}}|name={{.Name}}|id={{.ID}}"
+    #     mode: "non-blocking"
+    #     max-buffer-size: "4m"
+
+networks:
+  app_network:
+    external: true

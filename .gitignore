@@ -1,0 +1,28 @@
+# 환경변수 (절대 커밋 금지)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# uv
+# uv.lock 은 커밋 대상 (재현 가능한 빌드를 위해)
+
+# 로컬 데이터
+data/
+
+# 개인 설정 (규약 문서는 커밋, 개인 설정만 제외)
+.claude/settings.local.json
+
+# 에디터
+.vscode/
+.idea/
+
+# OS
+.DS_Store

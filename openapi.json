@@ -1,0 +1,709 @@
+{
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "title": "Detail",
+                        "type": "array"
+                    }
+                },
+                "title": "HTTPValidationError",
+                "type": "object"
+            },
+            "LoginRequest": {
+                "properties": {
+                    "email": {
+                        "format": "email",
+                        "title": "Email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "title": "Password",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "title": "LoginRequest",
+                "type": "object"
+            },
+            "MeResponse": {
+                "properties": {
+                    "email": {
+                        "title": "Email",
+                        "type": "string"
+                    },
+                    "roles": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Roles",
+                        "type": "array"
+                    },
+                    "user_id": {
+                        "title": "User Id",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "user_id",
+                    "email",
+                    "roles"
+                ],
+                "title": "MeResponse",
+                "type": "object"
+            },
+            "NoticeCreate": {
+                "properties": {
+                    "content": {
+                        "minLength": 1,
+                        "title": "Content",
+                        "type": "string"
+                    },
+                    "title": {
+                        "maxLength": 200,
+                        "minLength": 1,
+                        "title": "Title",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "title",
+                    "content"
+                ],
+                "title": "NoticeCreate",
+                "type": "object"
+            },
+            "NoticeResponse": {
+                "properties": {
+                    "author_id": {
+                        "title": "Author Id",
+                        "type": "integer"
+                    },
+                    "content": {
+                        "title": "Content",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "format": "date-time",
+                        "title": "Created At",
+                        "type": "string"
+                    },
+                    "is_pinned": {
+                        "title": "Is Pinned",
+                        "type": "boolean"
+                    },
+                    "notice_id": {
+                        "title": "Notice Id",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "title": "Title",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "anyOf": [
+                            {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Updated At"
+                    },
+                    "view_count": {
+                        "title": "View Count",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "notice_id",
+                    "title",
+                    "content",
+                    "author_id",
+                    "is_pinned",
+                    "view_count",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "NoticeResponse",
+                "type": "object"
+            },
+            "NoticeUpdate": {
+                "properties": {
+                    "content": {
+                        "anyOf": [
+                            {
+                                "minLength": 1,
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "is_pinned": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Is Pinned"
+                    },
+                    "title": {
+                        "anyOf": [
+                            {
+                                "maxLength": 200,
+                                "minLength": 1,
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Title"
+                    }
+                },
+                "title": "NoticeUpdate",
+                "type": "object"
+            },
+            "PageResponse_NoticeResponse_": {
+                "properties": {
+                    "items": {
+                        "items": {
+                            "$ref": "#/components/schemas/NoticeResponse"
+                        },
+                        "title": "Items",
+                        "type": "array"
+                    },
+                    "limit": {
+                        "title": "Limit",
+                        "type": "integer"
+                    },
+                    "offset": {
+                        "title": "Offset",
+                        "type": "integer"
+                    },
+                    "total": {
+                        "title": "Total",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "items",
+                    "total",
+                    "offset",
+                    "limit"
+                ],
+                "title": "PageResponse[NoticeResponse]",
+                "type": "object"
+            },
+            "RegisterRequest": {
+                "properties": {
+                    "email": {
+                        "format": "email",
+                        "title": "Email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "maxLength": 128,
+                        "minLength": 8,
+                        "title": "Password",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "title": "RegisterRequest",
+                "type": "object"
+            },
+            "TokenResponse": {
+                "properties": {
+                    "access_token": {
+                        "title": "Access Token",
+                        "type": "string"
+                    },
+                    "expires_in": {
+                        "title": "Expires In",
+                        "type": "integer"
+                    },
+                    "token_type": {
+                        "default": "bearer",
+                        "title": "Token Type",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "access_token",
+                    "expires_in"
+                ],
+                "title": "TokenResponse",
+                "type": "object"
+            },
+            "ValidationError": {
+                "properties": {
+                    "ctx": {
+                        "title": "Context",
+                        "type": "object"
+                    },
+                    "input": {
+                        "title": "Input"
+                    },
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "title": "Location",
+                        "type": "array"
+                    },
+                    "msg": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Error Type",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError",
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "scheme": "bearer",
+                "type": "http"
+            }
+        }
+    },
+    "info": {
+        "title": "starterkit-be",
+        "version": "0.1.0"
+    },
+    "openapi": "3.1.0",
+    "paths": {
+        "/v1/auth/login": {
+            "post": {
+                "operationId": "login_v1_auth_login_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "summary": "Login",
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/v1/auth/logout": {
+            "post": {
+                "operationId": "logout_v1_auth_logout_post",
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    }
+                },
+                "summary": "Logout",
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/v1/auth/me": {
+            "get": {
+                "operationId": "me_v1_auth_me_get",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "summary": "Me",
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/v1/auth/refresh": {
+            "post": {
+                "operationId": "refresh_v1_auth_refresh_post",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    }
+                },
+                "summary": "Refresh",
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/v1/auth/register": {
+            "post": {
+                "operationId": "register_v1_auth_register_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "summary": "Register",
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/v1/notices": {
+            "get": {
+                "operationId": "list_notices_v1_notices_get",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "required": false,
+                        "schema": {
+                            "default": 0,
+                            "minimum": 0,
+                            "title": "Offset",
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": false,
+                        "schema": {
+                            "default": 20,
+                            "maximum": 100,
+                            "minimum": 1,
+                            "title": "Limit",
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "keyword",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "maxLength": 200,
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Keyword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PageResponse_NoticeResponse_"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "summary": "List Notices",
+                "tags": [
+                    "notices"
+                ]
+            },
+            "post": {
+                "operationId": "create_notice_v1_notices_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NoticeCreate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "summary": "Create Notice",
+                "tags": [
+                    "notices"
+                ]
+            }
+        },
+        "/v1/notices/{notice_id}": {
+            "delete": {
+                "operationId": "delete_notice_v1_notices__notice_id__delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "notice_id",
+                        "required": true,
+                        "schema": {
+                            "title": "Notice Id",
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "summary": "Delete Notice",
+                "tags": [
+                    "notices"
+                ]
+            },
+            "get": {
+                "operationId": "get_notice_v1_notices__notice_id__get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "notice_id",
+                        "required": true,
+                        "schema": {
+                            "title": "Notice Id",
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "summary": "Get Notice",
+                "tags": [
+                    "notices"
+                ]
+            },
+            "patch": {
+                "operationId": "update_notice_v1_notices__notice_id__patch",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "notice_id",
+                        "required": true,
+                        "schema": {
+                            "title": "Notice Id",
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NoticeUpdate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoticeResponse"
+                                }
+                            }
+                        },
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        },
+                        "description": "Validation Error"
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "summary": "Update Notice",
+                "tags": [
+                    "notices"
+                ]
+            }
+        }
+    }
+}

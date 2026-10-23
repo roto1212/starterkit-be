@@ -1,0 +1,38 @@
+# 로컬 개발 전용. 운영은 Swarm(docker-stack.yaml)이며 여기서는 compose를 쓰지 않는다.
+#
+# FastAPI 앱은 여기 없다 — 표준 로컬 워크플로우가 "FE+BE는 WSL2에 네이티브로
+# 띄우고, DB만 Docker로 돌린다"이기 때문이다(uv run uvicorn ... 로 직접 실행).
+#
+# 이미 공유 MSSQL 컨테이너가 떠 있다면(예: 다른 프로젝트와 같이 쓰는
+# 인스턴스) 아래 mssql 서비스는 띄우지 않고, .env의 DB_HOST/DB_PORT만 그
+# 인스턴스에 맞추면 된다. 이 파일은 "아무것도 없는 새 환경"에서 바로 동작하도록
+# 프로젝트 전용 컨테이너/네트워크로 구성했다 — scripts/rename_project.py가
+# container_name 등을 새 프로젝트명으로 바꿔준다.
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: starterkit-be-mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "${DB_PASSWORD}"
+      MSSQL_PID: "Developer"
+      TZ: "Asia/Seoul"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    restart: unless-stopped
+    networks:
+      - starterkit-be-network
+    # WSL2 Docker CE에서 host.docker.internal이 기본으로 안 잡히는 경우가 있다
+    # (앱을 나중에 컨테이너로도 띄워볼 때 필요). DB만 쓰는 지금 구성엔 영향 없지만
+    # 표준이라 미리 남겨둔다.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  starterkit-be-network:
+    driver: bridge
+
+volumes:
+  mssql-data:
