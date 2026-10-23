@@ -20,6 +20,9 @@ data/
 # 개인 설정 (규약 문서는 커밋, 개인 설정만 제외)
 .claude/settings.local.json
 
+# archify 산출물 (다이어그램 생성물)
+.archify/
+
 # 에디터
 .vscode/
 .idea/
