@@ -4,6 +4,32 @@ FastAPI + async SQLAlchemy(aioodbc) + MSSQL 2019 스타터킷. 새 백엔드
 서비스를 시작할 때마다 반복하던 결정(디렉터리 구조, DB 세션 관리, 마이그레이션,
 Docker, 배포 설정)을 코드로 고정해둔 템플릿이다.
 
+## 용도
+
+새 백엔드 서비스를 시작할 때 구조·DB·인증·배포 설정을 처음부터 다시 정하지 않고
+바로 가져다 쓰는 FastAPI 백엔드 템플릿. 프로토타이핑과 프로덕션 시작점 모두를
+목표로 한다.
+
+## 주요 기능
+
+- **레이어드 구조**: `Endpoint → Service → Repository → Model`. 공개 API 스키마와
+  내부 DTO를 분리해 DB 컬럼이 응답으로 새지 않게 한다.
+- **비동기 DB 세션 관리**: async SQLAlchemy 2.0 + aioodbc, 트랜잭션 경계(`commit()`)는
+  Service에서 일원화한다.
+- **JWT 인증**: Access/Refresh 토큰, Argon2 비밀번호 해시, 로그인 실패 횟수 기반
+  계정 잠금, 역할 기반 접근 제어(`require_roles`). 필요 없으면 통째로 제거할 수 있다.
+- **CRUD 예제 도메인(공지사항)**: 검색·페이징, 작성자 또는 admin만 수정/삭제하는
+  소유권 판정. 새 도메인은 이 코드를 복사해 시작한다.
+- **운영 안전장치**: 시크릿 fail-fast 설정, 요청 로그 민감정보 마스킹, 전역 예외
+  처리, 헬스체크(`/health`, `/health/db`).
+- **개발 도구**: Alembic 마이그레이션, OpenAPI 내보내기, 프로젝트 이름 일괄 변경
+  스크립트, 단위/통합/API 3계층 테스트, ruff + mypy.
+
+## 기술 스택
+
+FastAPI · SQLAlchemy 2.0(async) · MSSQL 2019 · Alembic · Pydantic v2 · uv ·
+Python 3.12 · Docker Compose(로컬) / Swarm(운영 템플릿) · pytest
+
 ## 이 킷으로 뭘 시작하려면
 
 새 프로젝트를 시작할 때는 [`docs/BOOTSTRAP.md`](docs/BOOTSTRAP.md)를 따라간다.
